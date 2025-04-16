@@ -156,7 +156,7 @@ def hangman(secret_word, with_help):
             letters_guessed.append(guess)
             print(f"Good guess: {get_word_progress(secret_word, letters_guessed)}")
         # 2.3) Guesses Remaining
-        elif guess not in get_available_letters(letters_guessed):
+        elif guess in letters_guessed:
             print(f"Oops! You've already guessed that letter: {get_word_progress(secret_word, letters_guessed)}")
             guesses_remaining -= 2
         elif guess in "aeiou":
@@ -168,7 +168,7 @@ def hangman(secret_word, with_help):
             letters_guessed.append(guess)
             guesses_remaining -= 1
       # 2.4) The Game with Help
-      elif guess == '!':
+      elif guess == '!' and with_help == True:
           if guesses_remaining >= 3:
               choose_from = list({letter for letter in secret_word if letter in get_available_letters(letters_guessed)})
               new = random.randint(0, len(choose_from)-1)
