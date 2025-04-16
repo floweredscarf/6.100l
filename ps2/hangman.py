@@ -88,7 +88,13 @@ def get_available_letters(letters_guessed):
       alphabetical order
     """
     # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    letters = 'abcdefghijklmnopqrstuvwxyz'
+    L = list(letters)
+    L_copy = L[:]
+    for letter in L_copy:
+        if letter in letters_guessed:
+            L.remove(letter)
+    return ''.join(L)
 
 
 
