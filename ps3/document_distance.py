@@ -38,7 +38,7 @@ def text_to_list(input_text):
     Returns:
         list representation of input_text, where each word is a different element in the list
     """
-    pass
+    return input_text.split()
 
 
 ### Problem 1: Get Frequency ###
@@ -53,7 +53,13 @@ def get_frequencies(input_iterable):
     Note: 
         You can assume that the only kinds of white space in the text documents we provide will be new lines or space(s) between words (i.e. there are no tabs)
     """
-    pass
+    frequencies = {}
+    for string in input_iterable:
+        if string not in frequencies:
+            frequencies[string] = 1
+        else:
+            frequencies[string] += 1
+    return frequencies
 
 
 ### Problem 2: Letter Frequencies ###
@@ -66,7 +72,13 @@ def get_letter_frequencies(word):
         is a letter in word and the corresponding int
         is the frequency of the letter in word
     """
-    pass
+    letter_frequencies = {}
+    for letter in word:
+        if letter not in letter_frequencies:
+            letter_frequencies[letter] = 1
+        else:
+            letter_frequencies[letter] += 1
+    return letter_frequencies
 
 
 ### Problem 3: Similarity ###
@@ -94,7 +106,19 @@ def calculate_similarity_score(freq_dict1, freq_dict2):
          all frequencies in both dict1 and dict2.
         Return 1-(DIFF/ALL) rounded to 2 decimal places
     """
-    pass
+    DIFF = 0
+    ALL = 0
+    for element in freq_dict1:
+        ALL += freq_dict1[element]
+        if element in freq_dict2:
+            DIFF += abs(freq_dict1[element] - freq_dict2[element])
+        else:
+            DIFF += freq_dict1[element]
+    for element in freq_dict2:
+        ALL += freq_dict2[element]
+        if element not in freq_dict1:
+            DIFF += freq_dict2[element]
+    return 1 - round((DIFF / ALL), 2)
 
 
 ### Problem 4: Most Frequent Word(s) ###
@@ -118,7 +142,16 @@ def get_most_frequent_words(freq_dict1, freq_dict2):
     If multiple words are tied (i.e. share the same highest frequency),
     return an alphabetically ordered list of all these words.
     """
-    pass
+    word_frequency = {}
+    for word in freq_dict1:
+        word_frequency[word] = freq_dict1[word]
+    for word in freq_dict2:
+        if word not in word_frequency:
+            word_frequency[word] = freq_dict2[word]
+        else:
+            word_frequency[word] += freq_dict2[word]
+    highest_frequency = max(word_frequency.values())
+    return sorted([word for word in word_frequency if word_frequency[word] == highest_frequency])
 
 
 ### Problem 5: Finding TF-IDF ###
@@ -133,7 +166,11 @@ def get_tf(file_path):
         in the document) / (total number of words in the document)
     * Think about how we can use get_frequencies from earlier
     """
-    pass
+    words = text_to_list(load_file(file_path))
+    frequencies = get_frequencies(words)
+    for word in frequencies:
+        frequencies[word] /= len(words)
+    return frequencies
 
 def get_idf(file_paths):
     """
@@ -147,7 +184,18 @@ def get_idf(file_paths):
     with math.log10()
 
     """
-    pass
+    words = {}
+    for file_path in file_paths:
+        document = set(text_to_list(load_file(file_path)))
+        for word in document:
+            if word in words:
+                words[word] += 1
+            else:
+                words[word] = 1
+    IDF = {}
+    for word in words:
+        IDF[word] = math.log10(len(file_paths) / words[word])
+    return IDF
 
 def get_tfidf(tf_file_path, idf_file_paths):
     """
@@ -162,7 +210,12 @@ def get_tfidf(tf_file_path, idf_file_paths):
 
         * TF-IDF(i) = TF(i) * IDF(i)
         """
-    pass
+    tfidf = []
+    tf = get_tf(tf_file_path)
+    idf = get_idf(idf_file_paths)
+    for word in tf:
+        tfidf.append((word, tf[word] * idf[word]))
+    return sorted(tfidf, key=lambda x: (x[1], x[0]))
 
 
 if __name__ == "__main__":
