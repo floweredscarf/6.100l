@@ -104,7 +104,9 @@ def decode_story():
     Returns: (string) the decoded story
 
     '''
-    raise NotImplementedError  # delete this line and replace with your code here
+    ciphertext = ps4b.EncryptedMessage(get_story_string())
+    pads = get_story_pads()
+    return decrypt_message_try_pads(ciphertext, pads).get_text()
 
 
 
