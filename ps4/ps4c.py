@@ -80,7 +80,20 @@ def decrypt_message_try_pads(ciphertext, pads):
 
     Returns: (PlaintextMessage) A message with the decrypted ciphertext and the best pad
     '''
-    raise NotImplementedError  # delete this line and replace with your code here
+    word_list = load_words(WORDLIST_FILENAME)
+    most = 0
+    best_pad = None
+    for pad in pads:
+        plaintext = ciphertext.decrypt_message(pad).get_text()
+        words = plaintext.split()
+        count = 0
+        for word in words:
+            if is_word(word_list, word):
+                count += 1
+        if count >= most:
+            most = count
+            best_pad = pad
+    return ciphertext.decrypt_message(best_pad)
 
 
 def decode_story():
