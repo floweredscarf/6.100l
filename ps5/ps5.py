@@ -69,7 +69,14 @@ def img_to_pix(filename):
                  in form (R,G,B) such as [(0,0,0),(255,255,255),(38,29,58)...] for RGB image
                  in form L such as [60,66,72...] for BW image
     """
-    pass
+    # pixels_list = []
+    # image = Image.open(filename)
+    # for y in range(image.height):
+    #     for x in range(image.width):
+    #         pixels_list.append(image.getpixel((x, y)))
+    # return pixels_list
+    image = Image.open(filename)
+    return list(image.getdata())
 
 
 def pix_to_img(pixels_list, size, mode):
@@ -88,7 +95,9 @@ def pix_to_img(pixels_list, size, mode):
     returns:
         img: Image object made from list of pixels
     """
-    pass
+    image = Image.new(mode, size)
+    image.putdata(pixels_list)
+    return image
 
 
 def filter(pixels_list, color):
@@ -100,7 +109,14 @@ def filter(pixels_list, color):
     returns: list of pixels in same format as earlier functions,
     transformed by matrix multiplication
     """
-    pass
+    matrix = make_matrix(color)
+    new_pixels = []
+    for pixel in pixels_list:
+        rgb = list(pixel)
+        transformed = matrix_multiply(matrix, rgb)
+        new_pixel = tuple(list(map(round, transformed)))
+        new_pixels.append(new_pixel)
+    return new_pixels
 
 
 def extract_end_bits(num_end_bits, pixel):
