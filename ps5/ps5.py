@@ -160,7 +160,7 @@ def extract_end_bits(num_end_bits, pixel):
         r = extract_end_bits(num_end_bits, r)
         g = extract_end_bits(num_end_bits, g)
         b = extract_end_bits(num_end_bits, b)
-        return tuple([r, g, b])
+        return (r, g, b)
 
 
 def reveal_bw_image(filename):
