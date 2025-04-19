@@ -149,7 +149,18 @@ def extract_end_bits(num_end_bits, pixel):
     Returns:
         The num_end_bits of pixel, as an integer (BW) or tuple of integers (RGB).
     """
-    pass
+    if type(pixel) == int:
+        result = 0
+        for i in range(num_end_bits):
+            result += pixel % 2 * 2 ** i
+            pixel = pixel // 2
+        return result
+    elif type(pixel) == tuple:
+        r, g, b = pixel
+        r = extract_end_bits(num_end_bits, r)
+        g = extract_end_bits(num_end_bits, g)
+        b = extract_end_bits(num_end_bits, b)
+        return tuple([r, g, b])
 
 
 def reveal_bw_image(filename):
