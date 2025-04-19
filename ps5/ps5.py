@@ -186,7 +186,13 @@ def reveal_color_image(filename):
     Returns:
         result: an Image object containing the hidden image
     """
-    pass
+    pixels_list = img_to_pix(filename)
+    revealed_pixels = []
+    for pixel in pixels_list:
+        r, g, b = extract_end_bits(3, pixel)
+        revealed_pixels.append((int(r*255/7), int(g*255/7), int(b*255/7)))
+    size = Image.open(filename).size
+    return pix_to_img(revealed_pixels, size, 'RGB')
 
 
 def reveal_image(filename):
