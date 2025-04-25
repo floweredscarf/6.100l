@@ -178,6 +178,27 @@ def reveal_bw_image(filename):
     return pix_to_img(pixels_list, size, 'L')
 
 
+def hide_color_image(filename, secretfilename):
+    pixels_list = img_to_pix(filename)
+    pixels_list_secret = img_to_pix(secretfilename)
+    hidden_pixels = []
+    for i in range(len(pixels_list)):
+        r, g, b = pixels_list_secret[i]
+        r_secret = bin(int(r * 7 / 255))[2:].zfill(3)
+        g_secret = bin(int(g * 7 / 255))[2:].zfill(3)
+        b_secret = bin(int(b * 7 / 255))[2:].zfill(3)
+        r, g, b = pixels_list[i]
+        r = bin(r)[2:].zfill(8)[:-3]
+        r = int(r + str(r_secret), 2)
+        g = bin(g)[2:].zfill(8)[:-3]
+        g = int(g + str(g_secret), 2)
+        b = bin(b)[2:].zfill(8)[:-3]
+        b = int(b + str(b_secret), 2)
+        hidden_pixels.append((r, g, b))
+    size = Image.open(filename).size
+    return pix_to_img(hidden_pixels, size, 'RGB')
+
+
 def reveal_color_image(filename):
     """
     Extracts the 3 LSBs for each pixel in the RGB input image. 
